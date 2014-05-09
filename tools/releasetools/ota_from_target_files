@@ -581,6 +581,10 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   device_specific.FullOTA_InstallBegin()
 
+  script.Mount("/data")
+  script.ValidateSignatures("data")
+  script.Unmount("/data")
+
   system_progress = 0.75
 
   if OPTIONS.wipe_user_data:
@@ -651,6 +655,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   common.CheckSize(boot_img.data, "boot.img", OPTIONS.info_dict)
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
+
+  script.ValidateSignatures("cleanup")
 
   script.ShowProgress(0.05, 5)
   script.WriteRawImage("/boot", "boot.img")
